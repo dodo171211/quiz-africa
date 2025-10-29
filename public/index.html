@@ -28,9 +28,16 @@
             <h2>🕐 Aguardando outros jogadores...</h2>
             <div id="playersList"></div>
             <div class="game-info">
-                <p>Jogadores conectados: <span id="playerCount">1</span></p>
-                <p>O jogo começará quando houver pelo menos 2 jogadores</p>
-                <button id="startGameBtn" style="display: none;">Iniciar Jogo</button>
+                <p>Jogadores conectados: <span id="playerCount">1</span> / <span id="maxPlayers">18</span></p>
+                <p id="waitingMessage">O jogo começará quando todos clicarem em "Pronto" ou quando atingir 18 jogadores</p>
+                <div id="readyStatus">
+                    <p>Jogadores prontos: <span id="readyCount">0</span> / <span id="totalPlayers">1</span></p>
+                </div>
+                <button id="readyBtn" class="ready-button">Estou Pronto!</button>
+                <div id="autoStartWarning" class="auto-start-warning" style="display: none;">
+                    <p id="autoStartMessage"></p>
+                    <div id="countdownTimer" class="countdown-timer"></div>
+                </div>
             </div>
         </div>
 

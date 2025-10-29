@@ -82,14 +82,18 @@ let gameState = {
     questionStartTime: null,
     answers: new Map(),
     gameTimer: null,
-    questionTimer: null
+    questionTimer: null,
+    readyPlayers: new Set(), // jogadores que clicaram em "Pronto"
+    gameStartTimer: null // timer para iniciar automaticamente
 };
 
 // Configurações do jogo
 const GAME_CONFIG = {
     QUESTION_TIME: 30, // segundos por pergunta
     MIN_PLAYERS: 2, // mínimo de jogadores para iniciar
-    QUESTIONS_PER_GAME: 5 // número de perguntas por jogo
+    MAX_PLAYERS: 18, // máximo de jogadores
+    QUESTIONS_PER_GAME: 5, // número de perguntas por jogo
+    AUTO_START_DELAY: 10000 // 10 segundos para iniciar automaticamente quando atingir 18 jogadores
 };
 
 // Função para calcular pontuação
@@ -171,14 +175,33 @@ function showAnswer() {
     }, 3000);
 }
 
+// Função para verificar se pode iniciar o jogo
+function canStartGame() {
+    const totalPlayers = gameState.players.size;
+    const readyCount = gameState.readyPlayers.size;
+    
+    // Pode iniciar se:
+    // 1. Tem pelo menos 2 jogadores E todos estão prontos
+    // 2. OU atingiu 18 jogadores (início automático)
+    return (totalPlayers >= GAME_CONFIG.MIN_PLAYERS && readyCount === totalPlayers) || 
+           totalPlayers >= GAME_CONFIG.MAX_PLAYERS;
+}
+
 // Função para iniciar o jogo
 function startGame() {
-    if (gameState.players.size < GAME_CONFIG.MIN_PLAYERS) {
+    if (!canStartGame()) {
         return;
+    }
+
+    // Limpar timer de início automático se existir
+    if (gameState.gameStartTimer) {
+        clearTimeout(gameState.gameStartTimer);
+        gameState.gameStartTimer = null;
     }
 
     gameState.gameStarted = true;
     gameState.currentQuestion = 0;
+    gameState.readyPlayers.clear();
     
     // Resetar pontuações
     gameState.players.forEach(player => {
@@ -191,6 +214,34 @@ function startGame() {
     setTimeout(() => {
         startNewQuestion();
     }, 2000);
+}
+
+// Função para iniciar timer automático quando atingir 18 jogadores
+function startAutoStartTimer() {
+    if (gameState.gameStartTimer) {
+        clearTimeout(gameState.gameStartTimer);
+    }
+    
+    gameState.gameStartTimer = setTimeout(() => {
+        if (gameState.players.size >= GAME_CONFIG.MAX_PLAYERS && !gameState.gameStarted) {
+            io.emit('autoStartWarning', { 
+                message: `Atingiu ${GAME_CONFIG.MAX_PLAYERS} jogadores! O jogo iniciará automaticamente em 10 segundos...`,
+                countdown: 10
+            });
+            
+            // Iniciar contagem regressiva
+            let countdown = 10;
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                io.emit('autoStartCountdown', { countdown });
+                
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    startGame();
+                }
+            }, 1000);
+        }
+    }, GAME_CONFIG.AUTO_START_DELAY);
 }
 
 // Função para finalizar o jogo
@@ -217,17 +268,26 @@ io.on('connection', (socket) => {
             return;
         }
 
+        // Verificar limite de jogadores
+        if (gameState.players.size >= GAME_CONFIG.MAX_PLAYERS) {
+            socket.emit('gameStopped', `Limite de ${GAME_CONFIG.MAX_PLAYERS} jogadores atingido!`);
+            return;
+        }
+
         // Adicionar jogador
         gameState.players.set(socket.id, {
             id: socket.id,
             name: playerName,
             score: 0,
-            connected: true
+            connected: true,
+            ready: false
         });
 
         socket.emit('joined', {
             playerId: socket.id,
-            playerName: playerName
+            playerName: playerName,
+            maxPlayers: GAME_CONFIG.MAX_PLAYERS,
+            currentPlayers: gameState.players.size
         });
 
         // Atualizar lista de jogadores
@@ -238,7 +298,38 @@ io.on('connection', (socket) => {
         const ranking = updateRanking();
         io.emit('rankingUpdate', ranking);
 
-        console.log(`${playerName} entrou no jogo`);
+        // Verificar se atingiu 18 jogadores para início automático
+        if (gameState.players.size >= GAME_CONFIG.MAX_PLAYERS) {
+            startAutoStartTimer();
+        }
+
+        console.log(`${playerName} entrou no jogo (${gameState.players.size}/${GAME_CONFIG.MAX_PLAYERS})`);
+    });
+
+    // Jogador clica em "Pronto"
+    socket.on('playerReady', () => {
+        if (gameState.gameStarted) {
+            return;
+        }
+
+        const player = gameState.players.get(socket.id);
+        if (!player) {
+            return;
+        }
+
+        player.ready = true;
+        gameState.readyPlayers.add(socket.id);
+
+        // Atualizar lista de jogadores
+        const players = Array.from(gameState.players.values());
+        io.emit('playersUpdate', players);
+
+        // Verificar se pode iniciar o jogo
+        if (canStartGame()) {
+            startGame();
+        }
+
+        console.log(`${player.name} está pronto (${gameState.readyPlayers.size}/${gameState.players.size})`);
     });
 
     // Jogador responde pergunta
@@ -288,7 +379,15 @@ io.on('connection', (socket) => {
             const player = gameState.players.get(socket.id);
             console.log(`${player.name} saiu do jogo`);
             
+            // Remover do estado de pronto
+            gameState.readyPlayers.delete(socket.id);
             gameState.players.delete(socket.id);
+            
+            // Limpar timer de início automático se não há mais jogadores suficientes
+            if (gameState.gameStartTimer && gameState.players.size < GAME_CONFIG.MAX_PLAYERS) {
+                clearTimeout(gameState.gameStartTimer);
+                gameState.gameStartTimer = null;
+            }
             
             // Se não há jogadores suficientes, parar o jogo
             if (gameState.gameStarted && gameState.players.size < GAME_CONFIG.MIN_PLAYERS) {

@@ -27,7 +27,14 @@ class QuizGame {
         // Waiting elements
         this.playersList = document.getElementById('playersList');
         this.playerCount = document.getElementById('playerCount');
-        this.startGameBtn = document.getElementById('startGameBtn');
+        this.maxPlayers = document.getElementById('maxPlayers');
+        this.readyCount = document.getElementById('readyCount');
+        this.totalPlayers = document.getElementById('totalPlayers');
+        this.waitingMessage = document.getElementById('waitingMessage');
+        this.readyBtn = document.getElementById('readyBtn');
+        this.autoStartWarning = document.getElementById('autoStartWarning');
+        this.autoStartMessage = document.getElementById('autoStartMessage');
+        this.countdownTimer = document.getElementById('countdownTimer');
 
         // Game elements
         this.currentPlayerSpan = document.getElementById('currentPlayer');
@@ -55,6 +62,9 @@ class QuizGame {
         // Start game button
         this.startGameBtn.addEventListener('click', () => this.startGame());
 
+        // Ready button
+        this.readyBtn.addEventListener('click', () => this.toggleReady());
+
         // Play again
         this.playAgainButton.addEventListener('click', () => this.restartGame());
     }
@@ -65,6 +75,7 @@ class QuizGame {
             this.playerId = data.playerId;
             this.playerName = data.playerName;
             this.currentPlayerSpan.textContent = this.playerName;
+            this.maxPlayers.textContent = data.maxPlayers;
             this.showScreen('waiting');
         });
 
@@ -126,6 +137,17 @@ class QuizGame {
             this.gameStatus.textContent = reason;
             this.gameStarted = false;
         });
+
+        // Aviso de início automático
+        this.socket.on('autoStartWarning', (data) => {
+            this.autoStartMessage.textContent = data.message;
+            this.autoStartWarning.style.display = 'block';
+        });
+
+        // Contagem regressiva
+        this.socket.on('autoStartCountdown', (data) => {
+            this.countdownTimer.textContent = data.countdown;
+        });
     }
 
     joinGame() {
@@ -140,6 +162,10 @@ class QuizGame {
 
     startGame() {
         this.socket.emit('startGame');
+    }
+
+    toggleReady() {
+        this.socket.emit('playerReady');
     }
 
     showScreen(screenName) {
@@ -169,20 +195,46 @@ class QuizGame {
 
     updatePlayersList(players) {
         this.playerCount.textContent = players.length;
+        this.totalPlayers.textContent = players.length;
+        
+        // Contar jogadores prontos
+        const readyCount = players.filter(player => player.ready).length;
+        this.readyCount.textContent = readyCount;
         
         this.playersList.innerHTML = '';
         players.forEach(player => {
             const playerTag = document.createElement('div');
             playerTag.className = 'player-tag';
             playerTag.textContent = player.name;
+            
+            if (player.ready) {
+                playerTag.classList.add('ready');
+            }
+            
             this.playersList.appendChild(playerTag);
         });
 
-        // Mostrar botão de iniciar se há jogadores suficientes
-        if (players.length >= 2) {
-            this.startGameBtn.style.display = 'block';
+        // Atualizar mensagem de espera
+        if (players.length >= 18) {
+            this.waitingMessage.textContent = 'Limite de 18 jogadores atingido! O jogo iniciará automaticamente em breve...';
+        } else if (readyCount === players.length && players.length >= 2) {
+            this.waitingMessage.textContent = 'Todos estão prontos! O jogo começará em breve...';
         } else {
-            this.startGameBtn.style.display = 'none';
+            this.waitingMessage.textContent = `O jogo começará quando todos clicarem em "Pronto" ou quando atingir 18 jogadores`;
+        }
+
+        // Atualizar botão pronto
+        const currentPlayer = players.find(p => p.id === this.playerId);
+        if (currentPlayer) {
+            if (currentPlayer.ready) {
+                this.readyBtn.textContent = 'Pronto!';
+                this.readyBtn.classList.add('ready');
+                this.readyBtn.disabled = true;
+            } else {
+                this.readyBtn.textContent = 'Estou Pronto!';
+                this.readyBtn.classList.remove('ready');
+                this.readyBtn.disabled = false;
+            }
         }
     }
 
