@@ -1,126 +1,56 @@
-# Quiz de Urbanização da África - Multiplayer
+# 🌍 Quiz de Urbanização da África
 
-Um jogo de quiz multiplayer online sobre urbanização africana, desenvolvido com Node.js e Socket.io.
-
-## 🎯 Características
-
-- **Multiplayer em tempo real**: Compete com outros jogadores simultaneamente
-- **Ranking ao vivo**: Veja sua posição atualizada em tempo real
-- **Perguntas especializadas**: 10 perguntas sobre urbanização africana
-- **Sistema de pontuação**: Pontos baseados na velocidade e precisão
-- **Interface moderna**: Design responsivo e intuitivo
-
-## 🚀 Como Executar
-
-### Pré-requisitos
-- Node.js (versão 14 ou superior)
-- npm
-
-### Instalação
-
-1. **Instalar dependências:**
-   ```bash
-   npm install
-   ```
-
-2. **Executar o servidor:**
-   ```bash
-   npm start
-   ```
-   ou
-   ```bash
-   node server.js
-   ```
-
-3. **Acessar o jogo:**
-   - Abra seu navegador
-   - Acesse: `http://localhost:3000`
+Um jogo de quiz interativo sobre urbanização e cidades africanas.
 
 ## 🎮 Como Jogar
 
-1. **Entrar no jogo**: Digite seu nome e clique em "Entrar no Jogo"
-2. **Aguardar jogadores**: O jogo precisa de pelo menos 2 jogadores
-3. **Responder perguntas**: Você tem 30 segundos para cada pergunta
-4. **Competir**: Veja seu ranking atualizado em tempo real
-5. **Ranking final**: Veja quem ganhou no final!
+1. **Abra o arquivo:** `JOGO-COMPLETO.html`
+2. **Digite seu nome** e clique "Entrar no Jogo"
+3. **Aguarde** na tela de espera
+4. **Clique "Estou Pronto!"** para iniciar
+5. **Responda** as 5 perguntas sobre África
+6. **Veja** seu ranking final!
 
-## 📁 Estrutura do Projeto
+## 📋 Funcionalidades
 
-```
-├── server.js          # Servidor Node.js com Socket.io
-├── package.json       # Dependências e scripts
-├── public/            # Arquivos do front-end
-│   ├── index.html    # Interface do jogo
-│   ├── style.css     # Estilos CSS
-│   └── script.js     # Lógica do cliente
-└── README.md         # Este arquivo
-```
-
-## 🔧 Tecnologias Utilizadas
-
-- **Backend**: Node.js, Express, Socket.io
-- **Frontend**: HTML5, CSS3, JavaScript (ES6+)
-- **Comunicação**: WebSockets para tempo real
+✅ **Tela de Login** - Digite seu nome  
+✅ **Tela de Espera** - Status da sala e botão "Pronto"  
+✅ **5 Perguntas** sobre urbanização da África  
+✅ **Timer de 30 segundos** por pergunta  
+✅ **Respostas corretas/incorretas** com cores  
+✅ **Explicações** para cada pergunta  
+✅ **Ranking final** com pontuação  
+✅ **Jogar novamente**  
 
 ## 🌍 Perguntas Incluídas
 
-O jogo inclui 10 perguntas sobre:
-- Cidades mais populosas da África
-- Taxas de urbanização por país
-- Desafios da urbanização
-- Crescimento populacional urbano
-- Migração rural-urbana
-- Desenvolvimento tecnológico
-- E muito mais!
+1. **Cidade mais populosa da África** (Lagos)
+2. **Maior taxa de urbanização** (Egito)  
+3. **Principal desafio da urbanização** (Todos os anteriores)
+4. **"Cidade do Ouro"** (Johannesburg)
+5. **Taxa de crescimento urbano** (3.5% ao ano)
 
-## 🚀 Deploy Online
+## 🚀 Execução
 
-Para subir o jogo online, você pode usar:
+**Simples:** Abra `JOGO-COMPLETO.html` no navegador!
 
-- **Heroku**: Adicione um `Procfile` com `web: node server.js`
-- **Vercel**: Configure como aplicação Node.js
-- **Railway**: Deploy direto do GitHub
-- **DigitalOcean**: Droplet com Node.js
+**Sem instalação necessária** - funciona offline!
 
-### Variáveis de Ambiente
-```bash
-PORT=3000  # Porta do servidor (opcional)
-```
+## 📁 Arquivos
 
-## 🎯 Funcionalidades Multiplayer
+- `JOGO-COMPLETO.html` - **Jogo principal (use este!)**
+- `public/` - Arquivos do projeto original (para referência)
+- `jogo-geografia/` - Versão alternativa (para referência)
 
-- **Conexão em tempo real**: Socket.io para comunicação instantânea
-- **Sincronização de perguntas**: Todos veem a mesma pergunta simultaneamente
-- **Ranking dinâmico**: Atualização automática das pontuações
-- **Gerenciamento de jogadores**: Controle de entrada/saída de jogadores
-- **Sistema de pontuação**: Pontos baseados em velocidade e precisão
+## 🎯 Objetivo
 
-## 🏆 Sistema de Pontuação
-
-- **Resposta correta**: 10 pontos base + pontos de velocidade
-- **Pontos de velocidade**: Até 60 pontos extras (30 segundos × 2)
-- **Resposta incorreta**: 0 pontos
-- **Sem resposta**: 0 pontos
-
-## 📱 Responsividade
-
-O jogo é totalmente responsivo e funciona em:
-- 💻 Desktop
-- 📱 Smartphones
-- 📟 Tablets
-
-## 🤝 Contribuição
-
-Sinta-se à vontade para contribuir com:
-- Novas perguntas sobre urbanização africana
-- Melhorias na interface
-- Correções de bugs
-- Novas funcionalidades
-
-## 📄 Licença
-
-MIT License - veja o arquivo LICENSE para detalhes.
+Testar conhecimentos sobre:
+- Cidades africanas
+- Urbanização na África
+- Desafios urbanos
+- Crescimento populacional
+- História das cidades
 
 ---
 
-**Desenvolvido com ❤️ para aprender sobre urbanização africana!**
+**Divirta-se aprendendo sobre a África!** 🌍

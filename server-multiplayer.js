@@ -289,13 +289,14 @@ server.listen(PORT, () => {
     console.log(`✅ Servidor rodando na porta ${PORT}`);
     console.log(`🌐 Acesse: http://localhost:${PORT}`);
     console.log('');
-    console.log('📋 FUNCIONALIDADES:');
+    console.log('📋 FUNCIONALIDADES MULTIPLAYER:');
     console.log('✅ Login com nome');
     console.log('✅ Tela de espera com status');
     console.log('✅ Botão "Pronto"');
     console.log('✅ Início automático com 18 jogadores');
     console.log('✅ Perguntas sobre urbanização da África');
     console.log('✅ Ranking em tempo real');
+    console.log('✅ Múltiplos jogadores conectados');
     console.log('');
     console.log('🛑 Para parar: Ctrl+C');
     console.log('========================================');

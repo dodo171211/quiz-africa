@@ -1,13 +1,13 @@
 @echo off
 echo ========================================
-echo   SERVIDOR COMPLETO - COM PERGUNTAS!
+echo   SERVIDOR MULTIPLAYER SIMPLES!
 echo ========================================
 echo.
 
-echo [1/4] Parando servidores anteriores...
+echo [1/3] Parando processos Node.js...
 taskkill /f /im node.exe >nul 2>&1
 
-echo [2/4] Verificando Node.js...
+echo [2/3] Verificando Node.js...
 node --version
 if %errorlevel% neq 0 (
     echo ERRO: Node.js nao encontrado!
@@ -17,27 +17,24 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-echo [3/4] Navegando para pasta...
-cd /d "%~dp0"
-echo Pasta: %CD%
-
-echo [4/4] Instalando dependencias...
-npm install express socket.io
-
+echo [3/3] Iniciando servidor...
 echo.
-echo ✅ INICIANDO SERVIDOR COMPLETO!
+echo ✅ SERVIDOR MULTIPLAYER INICIADO!
 echo.
 echo 🌐 Acesse: http://localhost:3000
 echo.
-echo 📋 TESTE COMPLETO:
+echo 📋 TESTE MULTIPLAYER:
 echo 1. Abra http://localhost:3000
 echo 2. Digite seu nome
 echo 3. Clique "Entrar no Jogo"
 echo 4. Veja a tela de espera
 echo 5. Clique "Estou Pronto!"
-echo 6. AGUARDE as perguntas aparecerem!
+echo 6. Abra OUTRA ABA do navegador
+echo 7. Digite outro nome e entre
+echo 8. Clique "Estou Pronto!" na segunda aba
+echo 9. O jogo iniciará automaticamente!
 echo.
-echo Se funcionar, voce vera as perguntas sobre Africa!
+echo Para parar: Ctrl+C
 echo.
 
-node servidor-completo.js
+node server-simples-multiplayer.js
