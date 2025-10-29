@@ -2,10 +2,10 @@
   "name": "quiz-urbanizacao-africa",
   "version": "1.0.0",
   "description": "Quiz de Urbanização da África Multiplayer com ranking em tempo real",
-  "main": "server.js",
+  "main": "server-railway.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
+    "start": "node server-railway.js",
+    "dev": "nodemon server-railway.js",
     "build": "echo 'No build step required'",
     "deploy": "echo 'Deploying to Railway'"
   },
