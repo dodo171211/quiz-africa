@@ -25,18 +25,48 @@
 
         <!-- Tela de Espera -->
         <div id="waitingScreen" class="screen">
-            <h2>🕐 Aguardando outros jogadores...</h2>
-            <div id="playersList"></div>
-            <div class="game-info">
-                <p>Jogadores conectados: <span id="playerCount">1</span> / <span id="maxPlayers">18</span></p>
-                <p id="waitingMessage">O jogo começará quando todos clicarem em "Pronto" ou quando atingir 18 jogadores</p>
-                <div id="readyStatus">
+            <h2>⏳ Aguardando Jogadores...</h2>
+            <div class="waiting-status">
+                <div class="status-card">
+                    <h3>📊 Status da Sala</h3>
+                    <p>Jogadores conectados: <span id="playerCount">1</span> / <span id="maxPlayers">18</span></p>
                     <p>Jogadores prontos: <span id="readyCount">0</span> / <span id="totalPlayers">1</span></p>
                 </div>
+                
+                <div class="waiting-message">
+                    <h3>🎯 Como o jogo inicia:</h3>
+                    <div class="start-conditions">
+                        <div class="condition">
+                            <span class="condition-icon">👥</span>
+                            <div class="condition-text">
+                                <strong>Opção 1:</strong> Todos clicam "Pronto"
+                                <br><small>Mínimo: 2 jogadores</small>
+                            </div>
+                        </div>
+                        <div class="condition">
+                            <span class="condition-icon">🚀</span>
+                            <div class="condition-text">
+                                <strong>Opção 2:</strong> Atingir 18 jogadores
+                                <br><small>Início automático em 10 segundos</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="playersList" class="players-grid"></div>
+            
+            <div class="ready-section">
                 <button id="readyBtn" class="ready-button">Estou Pronto!</button>
-                <div id="autoStartWarning" class="auto-start-warning" style="display: none;">
+                <p class="ready-info">Clique quando estiver pronto para jogar</p>
+            </div>
+
+            <div id="autoStartWarning" class="auto-start-warning" style="display: none;">
+                <div class="warning-content">
+                    <h3>🚨 Limite Atingido!</h3>
                     <p id="autoStartMessage"></p>
                     <div id="countdownTimer" class="countdown-timer"></div>
+                    <p class="countdown-text">O jogo iniciará automaticamente...</p>
                 </div>
             </div>
         </div>

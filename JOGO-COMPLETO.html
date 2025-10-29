@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de Urbanização da África - JOGO COMPLETO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .screen {
+            display: none;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin: 20px 0;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4a5568;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        h2 {
+            text-align: center;
+            color: #4a5568;
+            margin-bottom: 20px;
+        }
+
+        .login-form {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        #playerName {
+            width: 300px;
+            padding: 15px;
+            font-size: 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        #playerName:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .question-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .question-number {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .question-text {
+            font-size: 24px;
+            margin-bottom: 30px;
+            color: #2d3748;
+            line-height: 1.4;
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .option-button {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .option-button:hover {
+            background: #edf2f7;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .option-button.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .option-button.correct {
+            background: #48bb78;
+            color: white;
+            border-color: #48bb78;
+        }
+
+        .option-button.incorrect {
+            background: #f56565;
+            color: white;
+            border-color: #f56565;
+        }
+
+        .timer {
+            background: #f56565;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 24px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 20px 0;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .explanation {
+            background: #f0fff4;
+            border: 2px solid #9ae6b4;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .explanation h3 {
+            color: #2f855a;
+            margin-bottom: 10px;
+        }
+
+        .explanation p {
+            color: #2d3748;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .ranking-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .ranking-item {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .ranking-item.first {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            border-color: #f6ad55;
+        }
+
+        .ranking-item.second {
+            background: linear-gradient(135deg, #c0c0c0 0%, #e2e8f0 100%);
+            border-color: #a0aec0;
+        }
+
+        .ranking-item.third {
+            background: linear-gradient(135deg, #cd7f32 0%, #ed8936 100%);
+            border-color: #dd6b20;
+        }
+
+        .ranking-position {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .ranking-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .ranking-score {
+            font-size: 20px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .waiting-status {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .status-card {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .status-card h3 {
+            color: #4a5568;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .status-card p {
+            margin: 8px 0;
+            font-size: 16px;
+            color: #2d3748;
+        }
+
+        .waiting-message {
+            background: #edf2f7;
+            border: 2px solid #cbd5e0;
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .waiting-message h3 {
+            color: #4a5568;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .start-conditions {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .condition {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .condition-icon {
+            font-size: 24px;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .condition-text {
+            flex: 1;
+        }
+
+        .condition-text strong {
+            color: #2d3748;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .condition-text small {
+            color: #718096;
+            font-size: 14px;
+        }
+
+        .players-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 15px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .player-tag {
+            background: #e2e8f0;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            position: relative;
+            text-align: center;
+        }
+
+        .player-tag.ready {
+            background: #48bb78;
+            color: white;
+        }
+
+        .player-tag.ready::after {
+            content: "✓";
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #2d3748;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .ready-section {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f0fff4;
+            border: 2px solid #9ae6b4;
+            border-radius: 15px;
+        }
+
+        .ready-button {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin: 20px 0;
+        }
+
+        .ready-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .ready-button.ready {
+            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+        }
+
+        .ready-info {
+            margin-top: 10px;
+            color: #2f855a;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .waiting-status {
+                grid-template-columns: 1fr;
+            }
+            
+            .options-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            #playerName {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Tela de Login -->
+        <div id="loginScreen" class="screen active">
+            <h1>🌍 Quiz de Urbanização da África</h1>
+            <p class="subtitle">Teste seus conhecimentos sobre as cidades e urbanização africana!</p>
+            <div class="login-form">
+                <input type="text" id="playerName" placeholder="Digite seu nome" maxlength="20">
+                <button id="joinGame">Entrar no Jogo</button>
+            </div>
+            <div class="game-info">
+                <p>🎯 Responda perguntas sobre urbanização africana</p>
+                <p>⏱️ 30 segundos por pergunta</p>
+                <p>🏆 Compita com outros jogadores em tempo real</p>
+            </div>
+        </div>
+
+        <!-- Tela de Espera -->
+        <div id="waitingScreen" class="screen">
+            <h2>⏳ Aguardando Jogadores...</h2>
+            <div class="waiting-status">
+                <div class="status-card">
+                    <h3>📊 Status da Sala</h3>
+                    <p>Jogadores conectados: <span id="playerCount">1</span> / <span id="maxPlayers">18</span></p>
+                    <p>Jogadores prontos: <span id="readyCount">0</span> / <span id="totalPlayers">1</span></p>
+                </div>
+                
+                <div class="waiting-message">
+                    <h3>🎯 Como o jogo inicia:</h3>
+                    <div class="start-conditions">
+                        <div class="condition">
+                            <span class="condition-icon">👥</span>
+                            <div class="condition-text">
+                                <strong>Opção 1:</strong> Todos clicam "Pronto"
+                                <br><small>Mínimo: 2 jogadores</small>
+                            </div>
+                        </div>
+                        <div class="condition">
+                            <span class="condition-icon">🚀</span>
+                            <div class="condition-text">
+                                <strong>Opção 2:</strong> Atingir 18 jogadores
+                                <br><small>Início automático em 10 segundos</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="playersList" class="players-grid">
+                <div class="player-tag" id="currentPlayerTag">Você</div>
+            </div>
+            
+            <div class="ready-section">
+                <button id="readyBtn" class="ready-button">Estou Pronto!</button>
+                <p class="ready-info">Clique quando estiver pronto para jogar</p>
+            </div>
+        </div>
+
+        <!-- Tela do Jogo -->
+        <div id="gameScreen" class="screen">
+            <div class="question-container">
+                <div class="question-number" id="questionNumber">Pergunta 1 de 5</div>
+                <div class="question-text" id="questionText">Carregando pergunta...</div>
+                <div class="timer" id="timer">30</div>
+            </div>
+            
+            <div class="options-container" id="optionsContainer">
+                <!-- Opções serão inseridas aqui -->
+            </div>
+            
+            <div class="explanation" id="explanation" style="display: none;">
+                <h3>📚 Explicação:</h3>
+                <p id="explanationText"></p>
+            </div>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <button id="nextQuestion" style="display: none;">Próxima Pergunta</button>
+                <button id="finishGame" style="display: none;">Ver Ranking</button>
+            </div>
+        </div>
+
+        <!-- Tela de Ranking -->
+        <div id="rankingScreen" class="screen">
+            <h2>🏆 Ranking Final</h2>
+            <div class="ranking-container" id="rankingContainer">
+                <!-- Ranking será inserido aqui -->
+            </div>
+            <div style="text-align: center; margin: 30px 0;">
+                <button id="playAgain">Jogar Novamente</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Perguntas sobre urbanização da África
+        const questions = [
+            {
+                question: "Qual é a cidade mais populosa da África?",
+                options: ["Lagos", "Cairo", "Kinshasa", "Johannesburg"],
+                correct: 0,
+                explanation: "Lagos, na Nigéria, é a cidade mais populosa da África com mais de 15 milhões de habitantes."
+            },
+            {
+                question: "Qual país africano tem a maior taxa de urbanização?",
+                options: ["Nigéria", "Egito", "África do Sul", "Quênia"],
+                correct: 1,
+                explanation: "O Egito tem uma das maiores taxas de urbanização da África, com mais de 40% da população vivendo em áreas urbanas."
+            },
+            {
+                question: "Qual é o principal desafio da urbanização na África?",
+                options: ["Falta de água", "Infraestrutura inadequada", "Poluição", "Todos os anteriores"],
+                correct: 3,
+                explanation: "A urbanização na África enfrenta múltiplos desafios: falta de água, infraestrutura inadequada e poluição."
+            },
+            {
+                question: "Qual cidade africana é conhecida como 'Cidade do Ouro'?",
+                options: ["Cidade do Cabo", "Johannesburg", "Nairobi", "Casablanca"],
+                correct: 1,
+                explanation: "Johannesburg, na África do Sul, é conhecida como 'Cidade do Ouro' devido à sua história com a mineração de ouro."
+            },
+            {
+                question: "Qual é a taxa média de crescimento urbano na África?",
+                options: ["2% ao ano", "3.5% ao ano", "5% ao ano", "7% ao ano"],
+                correct: 1,
+                explanation: "A África tem uma das maiores taxas de crescimento urbano do mundo, aproximadamente 3.5% ao ano."
+            }
+        ];
+
+        // Estado do jogo
+        let gameState = {
+            currentQuestion: 0,
+            score: 0,
+            playerName: '',
+            selectedAnswer: null,
+            timer: null,
+            timeLeft: 30
+        };
+
+        // Elementos DOM
+        const elements = {
+            loginScreen: document.getElementById('loginScreen'),
+            waitingScreen: document.getElementById('waitingScreen'),
+            gameScreen: document.getElementById('gameScreen'),
+            rankingScreen: document.getElementById('rankingScreen'),
+            playerNameInput: document.getElementById('playerName'),
+            joinButton: document.getElementById('joinGame'),
+            readyBtn: document.getElementById('readyBtn'),
+            currentPlayerTag: document.getElementById('currentPlayerTag'),
+            questionNumber: document.getElementById('questionNumber'),
+            questionText: document.getElementById('questionText'),
+            timer: document.getElementById('timer'),
+            optionsContainer: document.getElementById('optionsContainer'),
+            explanation: document.getElementById('explanation'),
+            explanationText: document.getElementById('explanationText'),
+            nextQuestion: document.getElementById('nextQuestion'),
+            finishGame: document.getElementById('finishGame'),
+            rankingContainer: document.getElementById('rankingContainer'),
+            playAgain: document.getElementById('playAgain')
+        };
+
+        // Entrar no jogo
+        elements.joinButton.addEventListener('click', () => {
+            const name = elements.playerNameInput.value.trim();
+            if (!name) {
+                alert('Por favor, digite seu nome!');
+                return;
+            }
+
+            gameState.playerName = name;
+            elements.currentPlayerTag.textContent = name;
+            
+            // Mostrar tela de espera
+            elements.loginScreen.classList.remove('active');
+            elements.waitingScreen.classList.add('active');
+        });
+
+        // Botão pronto
+        elements.readyBtn.addEventListener('click', () => {
+            elements.readyBtn.textContent = 'Pronto!';
+            elements.readyBtn.classList.add('ready');
+            elements.currentPlayerTag.classList.add('ready');
+            elements.readyBtn.disabled = true;
+            
+            // Simular início do jogo após 2 segundos
+            setTimeout(() => {
+                startGame();
+            }, 2000);
+        });
+
+        // Iniciar jogo
+        function startGame() {
+            elements.waitingScreen.classList.remove('active');
+            elements.gameScreen.classList.add('active');
+            
+            gameState.currentQuestion = 0;
+            gameState.score = 0;
+            
+            showQuestion();
+        }
+
+        // Mostrar pergunta
+        function showQuestion() {
+            const question = questions[gameState.currentQuestion];
+            
+            elements.questionNumber.textContent = `Pergunta ${gameState.currentQuestion + 1} de ${questions.length}`;
+            elements.questionText.textContent = question.question;
+            
+            // Limpar opções anteriores
+            elements.optionsContainer.innerHTML = '';
+            
+            // Criar botões de opção
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'option-button';
+                button.textContent = option;
+                button.addEventListener('click', () => selectAnswer(index));
+                elements.optionsContainer.appendChild(button);
+            });
+            
+            // Iniciar timer
+            startTimer();
+            
+            // Esconder explicação
+            elements.explanation.style.display = 'none';
+            elements.nextQuestion.style.display = 'none';
+            elements.finishGame.style.display = 'none';
+        }
+
+        // Selecionar resposta
+        function selectAnswer(answerIndex) {
+            if (gameState.selectedAnswer !== null) return;
+            
+            gameState.selectedAnswer = answerIndex;
+            const question = questions[gameState.currentQuestion];
+            
+            // Mostrar resposta correta
+            const buttons = elements.optionsContainer.querySelectorAll('.option-button');
+            buttons.forEach((button, index) => {
+                button.disabled = true;
+                if (index === question.correct) {
+                    button.classList.add('correct');
+                } else if (index === answerIndex && answerIndex !== question.correct) {
+                    button.classList.add('incorrect');
+                }
+            });
+            
+            // Verificar se acertou
+            if (answerIndex === question.correct) {
+                gameState.score += 10;
+            }
+            
+            // Mostrar explicação
+            elements.explanationText.textContent = question.explanation;
+            elements.explanation.style.display = 'block';
+            
+            // Parar timer
+            clearInterval(gameState.timer);
+            
+            // Mostrar botão próximo
+            if (gameState.currentQuestion < questions.length - 1) {
+                elements.nextQuestion.style.display = 'inline-block';
+            } else {
+                elements.finishGame.style.display = 'inline-block';
+            }
+        }
+
+        // Próxima pergunta
+        elements.nextQuestion.addEventListener('click', () => {
+            gameState.currentQuestion++;
+            gameState.selectedAnswer = null;
+            showQuestion();
+        });
+
+        // Finalizar jogo
+        elements.finishGame.addEventListener('click', () => {
+            showRanking();
+        });
+
+        // Mostrar ranking
+        function showRanking() {
+            elements.gameScreen.classList.remove('active');
+            elements.rankingScreen.classList.add('active');
+            
+            // Criar ranking simulado
+            const ranking = [
+                { name: gameState.playerName, score: gameState.score },
+                { name: "Jogador 2", score: Math.floor(Math.random() * 50) },
+                { name: "Jogador 3", score: Math.floor(Math.random() * 50) },
+                { name: "Jogador 4", score: Math.floor(Math.random() * 50) }
+            ];
+            
+            // Ordenar por pontuação
+            ranking.sort((a, b) => b.score - a.score);
+            
+            // Mostrar ranking
+            elements.rankingContainer.innerHTML = '';
+            ranking.forEach((player, index) => {
+                const item = document.createElement('div');
+                item.className = 'ranking-item';
+                
+                if (index === 0) item.classList.add('first');
+                else if (index === 1) item.classList.add('second');
+                else if (index === 2) item.classList.add('third');
+                
+                item.innerHTML = `
+                    <div class="ranking-position">${index + 1}º</div>
+                    <div class="ranking-name">${player.name}</div>
+                    <div class="ranking-score">${player.score} pontos</div>
+                `;
+                
+                elements.rankingContainer.appendChild(item);
+            });
+        }
+
+        // Jogar novamente
+        elements.playAgain.addEventListener('click', () => {
+            elements.rankingScreen.classList.remove('active');
+            elements.loginScreen.classList.add('active');
+            
+            // Resetar estado
+            gameState.currentQuestion = 0;
+            gameState.score = 0;
+            gameState.selectedAnswer = null;
+            
+            // Resetar elementos
+            elements.playerNameInput.value = '';
+            elements.readyBtn.textContent = 'Estou Pronto!';
+            elements.readyBtn.classList.remove('ready');
+            elements.readyBtn.disabled = false;
+            elements.currentPlayerTag.textContent = 'Você';
+            elements.currentPlayerTag.classList.remove('ready');
+        });
+
+        // Timer
+        function startTimer() {
+            gameState.timeLeft = 30;
+            elements.timer.textContent = gameState.timeLeft;
+            
+            gameState.timer = setInterval(() => {
+                gameState.timeLeft--;
+                elements.timer.textContent = gameState.timeLeft;
+                
+                if (gameState.timeLeft <= 0) {
+                    clearInterval(gameState.timer);
+                    
+                    // Tempo esgotado - mostrar resposta correta
+                    const question = questions[gameState.currentQuestion];
+                    const buttons = elements.optionsContainer.querySelectorAll('.option-button');
+                    buttons.forEach((button, index) => {
+                        button.disabled = true;
+                        if (index === question.correct) {
+                            button.classList.add('correct');
+                        }
+                    });
+                    
+                    // Mostrar explicação
+                    elements.explanationText.textContent = question.explanation;
+                    elements.explanation.style.display = 'block';
+                    
+                    // Mostrar botão próximo
+                    if (gameState.currentQuestion < questions.length - 1) {
+                        elements.nextQuestion.style.display = 'inline-block';
+                    } else {
+                        elements.finishGame.style.display = 'inline-block';
+                    }
+                }
+            }, 1000);
+        }
+
+        // Permitir entrar com Enter
+        elements.playerNameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                elements.joinButton.click();
+            }
+        });
+    </script>
+</body>
+</html>

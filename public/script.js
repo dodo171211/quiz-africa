@@ -30,7 +30,7 @@ class QuizGame {
         this.maxPlayers = document.getElementById('maxPlayers');
         this.readyCount = document.getElementById('readyCount');
         this.totalPlayers = document.getElementById('totalPlayers');
-        this.waitingMessage = document.getElementById('waitingMessage');
+        // Removido: waitingMessage não existe mais
         this.readyBtn = document.getElementById('readyBtn');
         this.autoStartWarning = document.getElementById('autoStartWarning');
         this.autoStartMessage = document.getElementById('autoStartMessage');
@@ -214,14 +214,7 @@ class QuizGame {
             this.playersList.appendChild(playerTag);
         });
 
-        // Atualizar mensagem de espera
-        if (players.length >= 18) {
-            this.waitingMessage.textContent = 'Limite de 18 jogadores atingido! O jogo iniciará automaticamente em breve...';
-        } else if (readyCount === players.length && players.length >= 2) {
-            this.waitingMessage.textContent = 'Todos estão prontos! O jogo começará em breve...';
-        } else {
-            this.waitingMessage.textContent = `O jogo começará quando todos clicarem em "Pronto" ou quando atingir 18 jogadores`;
-        }
+        // Mensagem de espera removida - agora é visual através dos cards
 
         // Atualizar botão pronto
         const currentPlayer = players.find(p => p.id === this.playerId);
