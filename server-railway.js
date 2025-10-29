@@ -161,8 +161,13 @@ function nextQuestion() {
     // Timer da pergunta
     setTimeout(() => {
         if (gameState.gameStarted) {
-            gameState.currentQuestion++;
-            nextQuestion();
+            // Se é a última pergunta, finalizar o jogo
+            if (gameState.currentQuestion >= questions.length - 1) {
+                endGame();
+            } else {
+                gameState.currentQuestion++;
+                nextQuestion();
+            }
         }
     }, 30000);
 }

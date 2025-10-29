@@ -170,8 +170,13 @@ function showAnswer() {
 
     // Próxima pergunta após 3 segundos
     setTimeout(() => {
-        gameState.currentQuestion++;
-        startNewQuestion();
+        // Se é a última pergunta, finalizar o jogo
+        if (gameState.currentQuestion >= GAME_CONFIG.QUESTIONS_PER_GAME - 1) {
+            endGame();
+        } else {
+            gameState.currentQuestion++;
+            startNewQuestion();
+        }
     }, 3000);
 }
 
