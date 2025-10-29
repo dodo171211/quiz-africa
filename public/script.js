@@ -127,7 +127,12 @@ class QuizGame {
 
         // Jogo finalizado
         this.socket.on('gameEnded', (data) => {
-            this.showFinalRanking(data.ranking);
+            console.log('🎯 Evento gameEnded recebido:', data);
+            if (data && data.ranking) {
+                this.showFinalRanking(data.ranking);
+            } else {
+                console.error('❌ Dados do ranking não encontrados:', data);
+            }
         });
 
         // Jogo parado
@@ -324,38 +329,71 @@ class QuizGame {
     }
 
     showFinalRanking(ranking) {
+        console.log('🏆 Mostrando ranking final:', ranking);
+        
+        // Forçar exibição da tela de ranking
         this.showScreen('ranking');
-        if (this.rankingList) {
-            this.rankingList.innerHTML = '';
-
-            ranking.forEach((player, index) => {
-                const item = document.createElement('div');
-                item.className = 'ranking-item';
-                
-                if (index < 3) {
-                    item.classList.add('top3');
-                } else {
-                    item.classList.add('other');
-                }
-
-                const position = document.createElement('span');
-                position.className = 'ranking-position';
-                position.textContent = index < 3 ? `#${index + 1}` : '';
-
-                const name = document.createElement('span');
-                name.className = 'ranking-name';
-                name.textContent = player.name;
-
-                const score = document.createElement('span');
-                score.className = 'ranking-score';
-                score.textContent = `${player.score} pontos`;
-
-                item.appendChild(position);
-                item.appendChild(name);
-                item.appendChild(score);
-                this.rankingList.appendChild(item);
-            });
+        
+        // Verificar se o elemento existe
+        if (!this.rankingList) {
+            console.error('❌ Elemento rankingList não encontrado!');
+            return;
         }
+        
+        // Limpar conteúdo anterior
+        this.rankingList.innerHTML = '';
+        
+        // Adicionar mensagem de teste
+        const testMessage = document.createElement('div');
+        testMessage.textContent = '🏆 RANKING FINAL - TESTE';
+        testMessage.style.cssText = 'color: red; font-size: 24px; text-align: center; margin: 20px;';
+        this.rankingList.appendChild(testMessage);
+
+        // Verificar se ranking tem dados
+        if (!ranking || !Array.isArray(ranking)) {
+            console.error('❌ Ranking inválido:', ranking);
+            const errorMessage = document.createElement('div');
+            errorMessage.textContent = 'Erro: Dados do ranking inválidos';
+            errorMessage.style.cssText = 'color: red; text-align: center;';
+            this.rankingList.appendChild(errorMessage);
+            return;
+        }
+
+        console.log('✅ Criando itens do ranking...');
+        ranking.forEach((player, index) => {
+            console.log(`👤 Jogador ${index + 1}:`, player);
+            const item = document.createElement('div');
+            item.className = 'ranking-item';
+            item.style.cssText = 'border: 2px solid #333; margin: 10px; padding: 10px; background: #f0f0f0;';
+            
+            if (index < 3) {
+                item.classList.add('top3');
+            } else {
+                item.classList.add('other');
+            }
+
+            const position = document.createElement('span');
+            position.className = 'ranking-position';
+            position.textContent = index < 3 ? `#${index + 1}` : '';
+            position.style.cssText = 'font-weight: bold; margin-right: 10px;';
+
+            const name = document.createElement('span');
+            name.className = 'ranking-name';
+            name.textContent = player.name || 'Nome não encontrado';
+            name.style.cssText = 'margin-right: 10px;';
+
+            const score = document.createElement('span');
+            score.className = 'ranking-score';
+            score.textContent = `${player.score || 0} pontos`;
+            score.style.cssText = 'font-weight: bold; color: #007bff;';
+
+            item.appendChild(position);
+            item.appendChild(name);
+            item.appendChild(score);
+            this.rankingList.appendChild(item);
+        });
+        
+        console.log('✅ Ranking criado com sucesso!');
     }
 
     restartGame() {

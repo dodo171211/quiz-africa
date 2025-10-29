@@ -176,6 +176,8 @@ function endGame() {
     gameState.gameStarted = false;
     gameState.currentQuestion = 0;
     
+    console.log('🏆 Finalizando jogo...');
+    
     // Calcular pontuações
     const scores = [];
     gameState.players.forEach((player, playerId) => {
@@ -200,6 +202,8 @@ function endGame() {
     scores.sort((a, b) => b.score - a.score);
     
     console.log('🏆 Jogo finalizado! Ranking:', scores);
+    console.log('📤 Enviando evento gameEnded para', gameState.players.size, 'jogadores');
+    
     io.emit('gameEnded', { ranking: scores });
 }
 
