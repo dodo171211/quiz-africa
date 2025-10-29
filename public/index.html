@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de Urbanização da África - Multiplayer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Tela de Login -->
+        <div id="loginScreen" class="screen active">
+            <h1>🌍 Quiz de Urbanização da África</h1>
+            <p class="subtitle">Teste seus conhecimentos sobre as cidades e urbanização africana!</p>
+            <div class="login-form">
+                <input type="text" id="playerName" placeholder="Digite seu nome" maxlength="20">
+                <button id="joinGame">Entrar no Jogo</button>
+            </div>
+            <div class="game-info">
+                <p>🎯 Responda perguntas sobre urbanização africana</p>
+                <p>⏱️ 30 segundos por pergunta</p>
+                <p>🏆 Compita com outros jogadores em tempo real</p>
+            </div>
+        </div>
+
+        <!-- Tela de Espera -->
+        <div id="waitingScreen" class="screen">
+            <h2>🕐 Aguardando outros jogadores...</h2>
+            <div id="playersList"></div>
+            <div class="game-info">
+                <p>Jogadores conectados: <span id="playerCount">1</span></p>
+                <p>O jogo começará quando houver pelo menos 2 jogadores</p>
+                <button id="startGameBtn" style="display: none;">Iniciar Jogo</button>
+            </div>
+        </div>
+
+        <!-- Tela do Jogo -->
+        <div id="gameScreen" class="screen">
+            <div class="game-header">
+                <div class="player-info">
+                    <span id="currentPlayer">Jogador</span>
+                    <span id="currentScore">Pontos: 0</span>
+                </div>
+                <div class="timer">
+                    <span id="timeLeft">30</span>s
+                </div>
+            </div>
+
+            <div class="question-container">
+                <div class="question-progress">
+                    <span id="questionProgress">Pergunta 1 de 5</span>
+                </div>
+                <h3 id="questionText">Pergunta aparecerá aqui...</h3>
+                <div id="optionsContainer" class="options">
+                    <!-- Opções serão inseridas aqui -->
+                </div>
+            </div>
+
+            <div class="game-status">
+                <p id="gameStatus">Aguardando próxima pergunta...</p>
+                <p id="explanation" class="explanation"></p>
+            </div>
+        </div>
+
+        <!-- Tela de Ranking -->
+        <div id="rankingScreen" class="screen">
+            <h2>🏆 Ranking Final</h2>
+            <div id="rankingList" class="ranking-list">
+                <!-- Ranking será inserido aqui -->
+            </div>
+            <button id="playAgain">Jogar Novamente</button>
+        </div>
+
+        <!-- Ranking em Tempo Real (Sidebar) -->
+        <div id="liveRanking" class="live-ranking">
+            <h4>📊 Ranking ao Vivo</h4>
+            <div id="liveRankingList">
+                <!-- Ranking em tempo real -->
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

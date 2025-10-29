@@ -1,0 +1,334 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+}
+
+.screen {
+    display: none;
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    margin: 20px 0;
+}
+
+.screen.active {
+    display: block;
+}
+
+h1 {
+    text-align: center;
+    color: #4a5568;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+}
+
+h2 {
+    text-align: center;
+    color: #4a5568;
+    margin-bottom: 20px;
+}
+
+/* Login Screen */
+.login-form {
+    text-align: center;
+}
+
+#playerName {
+    width: 300px;
+    padding: 15px;
+    font-size: 18px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#playerName:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Waiting Screen */
+#playersList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.player-tag {
+    background: #e2e8f0;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.game-info {
+    text-align: center;
+    color: #666;
+}
+
+/* Game Screen */
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 15px;
+    background: #f7fafc;
+    border-radius: 10px;
+}
+
+.player-info {
+    display: flex;
+    gap: 20px;
+}
+
+.timer {
+    background: #ff6b6b;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.question-container {
+    margin-bottom: 30px;
+}
+
+#questionText {
+    font-size: 1.5em;
+    margin-bottom: 25px;
+    text-align: center;
+    color: #2d3748;
+    line-height: 1.4;
+}
+
+.options {
+    display: grid;
+    gap: 15px;
+}
+
+.option {
+    background: #f7fafc;
+    border: 2px solid #e2e8f0;
+    padding: 15px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 16px;
+}
+
+.option:hover {
+    background: #edf2f7;
+    border-color: #667eea;
+}
+
+.option.selected {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.option.correct {
+    background: #48bb78;
+    color: white;
+    border-color: #48bb78;
+}
+
+.option.incorrect {
+    background: #f56565;
+    color: white;
+    border-color: #f56565;
+}
+
+.game-status {
+    text-align: center;
+    font-size: 18px;
+    color: #4a5568;
+}
+
+/* Ranking Screen */
+.ranking-list {
+    margin: 30px 0;
+}
+
+.ranking-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    margin: 10px 0;
+    border-radius: 10px;
+    font-size: 18px;
+}
+
+.ranking-item.top3 {
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    color: #744210;
+    font-weight: bold;
+}
+
+.ranking-item.top3:nth-child(2) {
+    background: linear-gradient(135deg, #c0c0c0 0%, #e2e8f0 100%);
+    color: #4a5568;
+}
+
+.ranking-item.top3:nth-child(3) {
+    background: linear-gradient(135deg, #cd7f32 0%, #d4af37 100%);
+    color: #744210;
+}
+
+.ranking-item.other {
+    background: #f7fafc;
+    color: #4a5568;
+}
+
+.ranking-position {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.ranking-name {
+    flex: 1;
+    margin-left: 20px;
+}
+
+.ranking-score {
+    font-weight: bold;
+}
+
+/* Live Ranking Sidebar */
+.live-ranking {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    min-width: 250px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.live-ranking h4 {
+    margin-bottom: 15px;
+    color: #4a5568;
+    text-align: center;
+}
+
+.live-ranking-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 14px;
+}
+
+.live-ranking-item:last-child {
+    border-bottom: none;
+}
+
+.live-ranking-item.top3 {
+    font-weight: bold;
+}
+
+.live-ranking-item.top3 .live-position {
+    color: #ffd700;
+}
+
+.live-ranking-item.top3:nth-child(2) .live-position {
+    color: #c0c0c0;
+}
+
+.live-ranking-item.top3:nth-child(3) .live-position {
+    color: #cd7f32;
+}
+
+.live-position {
+    font-weight: bold;
+    min-width: 30px;
+}
+
+.live-name {
+    flex: 1;
+    margin-left: 10px;
+}
+
+.live-score {
+    font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .live-ranking {
+        position: relative;
+        top: auto;
+        right: auto;
+        margin: 20px 0;
+    }
+    
+    .game-header {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .player-info {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    h1 {
+        font-size: 2em;
+    }
+    
+    #playerName {
+        width: 100%;
+        max-width: 300px;
+    }
+}

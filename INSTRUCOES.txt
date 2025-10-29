@@ -1,0 +1,49 @@
+# Instruções para Executar o Quiz de Urbanização da África
+
+## Passo a Passo Simples:
+
+1. **Abra o Terminal/Prompt de Comando**
+
+2. **Navegue até a pasta do projeto:**
+   ```
+   cd "C:\Users\Douglas\OneDrive\Área de Trabalho\jogo geografia"
+   ```
+
+3. **Instale as dependências:**
+   ```
+   npm install
+   ```
+
+4. **Execute o servidor:**
+   ```
+   node server.js
+   ```
+
+5. **Abra seu navegador e acesse:**
+   ```
+   http://localhost:3000
+   ```
+
+## Se der erro:
+
+- Certifique-se de que o Node.js está instalado
+- Verifique se está na pasta correta
+- Tente executar: `npm start` em vez de `node server.js`
+
+## Para testar o multiplayer:
+
+1. Abra várias abas do navegador
+2. Entre com nomes diferentes em cada aba
+3. Quando houver 2+ jogadores, o jogo começará automaticamente
+
+## Funcionalidades:
+
+✅ Sistema multiplayer em tempo real
+✅ Ranking ao vivo
+✅ 10 perguntas sobre urbanização africana
+✅ Sistema de pontuação baseado em velocidade
+✅ Interface responsiva
+✅ Pronto para deploy online
+
+---
+**Divirta-se jogando! 🎉**
